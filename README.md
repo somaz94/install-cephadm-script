@@ -135,7 +135,7 @@ Create a ceph-csi-values.yaml file with your Ceph cluster's configuration detail
 
 ```bash
 # Confirm Ceph fsid
-sudo ceph fsid
+ceph fsid
 
 # Check 6789 Port
 ss -nlpt | grep 6789
@@ -182,7 +182,7 @@ Create a StorageClass to use with Ceph-CSI for dynamic provisioning.
 
 ```bash
 # Confirm Ceph authentication details
-sudo ceph auth list |grep client.admin -A5
+ceph auth list |grep client.admin -A5
 client.admin
         key: AQAYINNlW7qOEhAAO++/Hvc6HBO+whoSJRT6eg==
         caps: [mds] allow *
