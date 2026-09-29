@@ -4,7 +4,6 @@
 SSH_KEY="/home/ubuntu/.ssh/id_rsa_ansible"
 INVENTORY_FILE="inventory.ini"
 CEPHADM_PREFLIGHT_PLAYBOOK="cephadm-preflight.yml"
-CEPHADM_CLIENTS_PLAYBOOK="cephadm-clients.yml"
 CEPHADM_DISTRIBUTE_SSHKEY_PLAYBOOK="cephadm-distribute-ssh-key.yml"
 HOST_GROUP=(test-server test-server-agent test-server-storage)
 ADMIN_HOST="test-server"

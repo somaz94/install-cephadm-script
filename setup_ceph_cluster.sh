@@ -70,4 +70,4 @@ label_osd_hosts_no_schedule
 
 check_osd_creation
 
-echo "Ceph cluster setup and client configuration completed successfully."
+echo "Ceph cluster setup completed successfully."

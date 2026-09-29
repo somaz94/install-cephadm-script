@@ -191,13 +191,7 @@ add_host_and_label() {
 label_osd_hosts_no_schedule() {
     echo "Applying '_no_schedule' label to all OSD hosts..."
     # OSD_HOST may be a single host or an array
-    if [[ ! "${OSD_HOST[@]}" ]]; then
-        osd_hosts=($OSD_HOST)
-    else
-        osd_hosts=("${OSD_HOST[@]}")
-    fi
-
-    for osd_host in "${osd_hosts[@]}"; do
+    for osd_host in "${OSD_HOST[@]}"; do
         sudo ceph orch host label add $osd_host _no_schedule && \
         echo "Label '_no_schedule' added to $osd_host."
     done
