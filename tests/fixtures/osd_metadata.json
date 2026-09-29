@@ -1,0 +1,20 @@
+[
+  {
+    "id": 7,
+    "hostname": "other-host",
+    "devices": "sdb",
+    "osd_objectstore": "bluestore"
+  },
+  {
+    "id": 0,
+    "hostname": "ceph-storage",
+    "devices": "sda,sdb",
+    "osd_objectstore": "bluestore"
+  },
+  {
+    "id": 1,
+    "hostname": "ceph-storage",
+    "devices": "sdc",
+    "osd_objectstore": "bluestore"
+  }
+]

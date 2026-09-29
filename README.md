@@ -230,6 +230,17 @@ persistentvolumeclaim/ceph-rbd-pvc   Bound    pvc-83fd673e-077c-4d24-b9c9-290118
 
 <br/>
 
+## Testing
+The shell functions are covered by [bats](https://github.com/bats-core/bats-core) tests that stub `sudo`, `ssh` and `sleep`, so no Ceph cluster is needed. `bats` and `jq` must be installed.
+
+```bash
+bats tests/
+```
+
+The fixtures in `tests/fixtures/` follow the JSON shape of `ceph osd metadata` and `ceph osd dump`. They check the script logic, not the behavior of a live cluster.
+
+<br/>
+
 ## Reference
 - [Cephadm-Ansible GitHub](https://github.com/ceph/cephadm-ansible)
 - [Ceph-CSI GitHub](https://github.com/ceph/ceph-csi)
