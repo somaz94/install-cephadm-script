@@ -7,7 +7,8 @@ read -p "Do you want to cleanup existing Ceph cluster? (yes/no): " user_confirma
 if [[ "$user_confirmation" == "yes" ]]; then
     CLEANUP_CEPH="true"
 else
-    CLEANUP_CEPH="false"
+    echo "Cleanup declined; leaving the cluster and OSD devices untouched."
+    exit 0
 fi
 
 cleanup_ceph_cluster
