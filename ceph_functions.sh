@@ -102,6 +102,17 @@ add_to_known_hosts() {
     ssh-keyscan -H $host_ip >> ~/.ssh/known_hosts
 }
 
+# ceph osd tree has no device column, so map host + disk to an OSD ID via metadata
+find_osd_id() {
+    sudo /usr/bin/ceph osd metadata --format=json | jq -r --arg host "$1" --arg dev "$2" \
+        '[.[] | select(.hostname == $host and any((.devices // "") | split(",")[]; . == $dev)) | .id][0] // empty'
+}
+
+osd_is_up_and_in() {
+    sudo /usr/bin/ceph osd dump --format=json | jq -e --argjson id "$1" \
+        '.osds[] | select(.osd == $id) | .up == 1 and .in == 1' > /dev/null
+}
+
 add_osds_and_wait() {
     for device in "${OSD_DEVICES[@]}"; do
         echo "Attempting to add OSD on /dev/$device..."
@@ -113,33 +124,28 @@ add_osds_and_wait() {
             continue
         fi
 
-        echo "Waiting a moment for OSD to be registered..."
-        sleep 10
+        echo "Monitoring the readiness of the OSD on /dev/$device..."
 
-        osd_id=$(sudo /usr/bin/ceph osd tree | grep -oP "/dev/$device.*osd.\K[0-9]+")
-
-        if [ -z "$osd_id" ]; then
-            echo "Unable to find OSD ID for /dev/$device. It might take a moment for the OSD to be visible in the cluster."
-        else
-            echo "OSD with ID $osd_id has been added on /dev/$device."
-        fi
-
-        echo "Monitoring the readiness of OSD.$osd_id on /dev/$device..."
-
+        osd_id=""
         success=false
         for attempt in {1..12}; do
-            if sudo /usr/bin/ceph osd tree | grep "osd.$osd_id" | grep -q "up" && sudo /usr/bin/ceph osd tree | grep "osd.$osd_id"; then
+            sleep 10
+            if [ -z "$osd_id" ]; then
+                osd_id=$(find_osd_id "$OSD_HOST" "$device")
+                if [ -n "$osd_id" ]; then
+                    echo "OSD with ID $osd_id has been added on /dev/$device."
+                fi
+            fi
+            if [ -n "$osd_id" ] && osd_is_up_and_in "$osd_id"; then
                 echo "OSD.$osd_id on /dev/$device is now ready."
                 success=true
                 break
-            else
-                echo "Waiting for OSD.$osd_id on /dev/$device to become ready..."
-                sleep 10
             fi
+            echo "Waiting for the OSD on /dev/$device to become ready..."
         done
 
         if ! $success; then
-            echo "Timeout waiting for OSD.$osd_id on /dev/$device to become ready. Please check Ceph cluster status."
+            echo "Timeout waiting for the OSD on /dev/$device (ID: ${osd_id:-unknown}) to become ready. Please check Ceph cluster status."
         fi
     done
 }
