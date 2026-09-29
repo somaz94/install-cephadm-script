@@ -52,9 +52,9 @@ cd cephadm-ansbile
 Edit the `inventory.ini` file to specify your cluster configuration.
 ```bash
 [all]
-# node1 ansible_host=95.54.0.14
-# node2 ansible_host=95.54.0.15
-# node3 ansible_host=95.54.0.16
+# node1 ansible_host=192.0.2.14
+# node2 ansible_host=192.0.2.15
+# node3 ansible_host=192.0.2.16
 
 # Ceph Client Nodes (Kubernetes nodes that require access to Ceph storage)
 [clients]
@@ -176,8 +176,8 @@ pod/ceph-csi-ceph-csi-rbd-nodeplugin-76k5s              3/3     Running   0     
 pod/ceph-csi-ceph-csi-rbd-provisioner-5d5dc6cc4-62dzb   7/7     Running   0          3s
 
 NAME                                                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/ceph-csi-ceph-csi-rbd-nodeplugin-http-metrics    ClusterIP   10.233.37.117   <none>        8080/TCP   3s
-service/ceph-csi-ceph-csi-rbd-provisioner-http-metrics   ClusterIP   10.233.41.120   <none>        8080/TCP   3s
+service/ceph-csi-ceph-csi-rbd-nodeplugin-http-metrics    ClusterIP   198.51.100.17   <none>        8080/TCP   3s
+service/ceph-csi-ceph-csi-rbd-provisioner-http-metrics   ClusterIP   198.51.100.20   <none>        8080/TCP   3s
 
 NAME                                              DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 daemonset.apps/ceph-csi-ceph-csi-rbd-nodeplugin   1         1         1       1            1           <none>          3s
@@ -196,7 +196,7 @@ Create a StorageClass to use with Ceph-CSI for dynamic provisioning.
 # Confirm Ceph authentication details
 ceph auth list |grep client.admin -A5
 client.admin
-        key: AQAYINNlW7qOEhAAO++/Hvc6HBO+whoSJRT6eg==
+        key: <your_client_admin_key>
         caps: [mds] allow *
         caps: [mgr] allow *
         caps: [mon] allow *
