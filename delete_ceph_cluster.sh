@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Load functions from ceph_functions.sh and ceph_vars.sh
 source ceph_vars.sh
 source ceph_functions.sh
 
@@ -11,10 +10,8 @@ else
     CLEANUP_CEPH="false"
 fi
 
-# Cleanup existing Ceph setup if confirmed
 cleanup_ceph_cluster
 
-# Wipe OSD devices
 echo "Wiping OSD devices on $OSD_HOST..."
 for device in ${OSD_DEVICES[@]}; do
     if ssh $OSD_HOST "sudo wipefs --all /dev/$device"; then

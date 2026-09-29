@@ -4,8 +4,8 @@ metadata:
   name: csi-rbd-secret
   namespace: kube-system
 stringData:
-  userID: admin # ceph user id(client.admin) admin user
-  userKey: "<your_client_admin_key>" # client.admin key
+  userID: admin # client.admin, without the "client." prefix
+  userKey: "<your_client_admin_key>" # sudo ceph auth get-key client.admin
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -17,9 +17,9 @@ metadata:
 provisioner: rbd.csi.ceph.com
 parameters:
    clusterID: "<your_ceph_fsid>" # sudo ceph fsid
-   pool: "kube" # sudo ceph df (Confirm Pool list
+   pool: "kube" # sudo ceph df (confirm the pool exists)
    imageFeatures: layering
-   csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret # Secret 
+   csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
    csi.storage.k8s.io/provisioner-secret-namespace: kube-system
    csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
    csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
